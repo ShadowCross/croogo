@@ -9,3 +9,11 @@ webroot/uploads/
 
 # Cake cache
 tmp/
+
+# Cake
+cake
+
+# Eclipse IDE
+.buildpath
+.project
+.settings/

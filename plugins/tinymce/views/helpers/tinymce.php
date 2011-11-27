@@ -96,7 +96,7 @@ class TinymceHelper extends AppHelper {
     }
 
     public function getSettings($settings = array()) {
-        $_settings = $this->settings;
+        $_settings = Set::merge($this->settings, array('content_css' => $this->Html->css('content.css')));
         $action = Inflector::camelize($this->params['controller']).'/'.$this->params['action'];
         if (isset($this->actions[$action])) {
             $settings = array();
