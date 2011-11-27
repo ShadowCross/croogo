@@ -122,15 +122,17 @@ class LayoutHelper extends AppHelper {
 /**
  * Show flash message
  *
- * @return void
+ * @return string
  */
     public function sessionFlash() {
         $messages = $this->Session->read('Message');
+        $output = '';
         if( is_array($messages) ) {
             foreach(array_keys($messages) AS $key) {
-                echo $this->Session->flash($key);
+                $output .= $this->Session->flash($key);
             }
         }
+        return $output;
     }
 /**
  * Meta tags
@@ -267,9 +269,17 @@ class LayoutHelper extends AppHelper {
                     $element = 'block';
                 }
                 if ($plugin) {
-                    $output .= $this->View->element($element, array('block' => $block, 'plugin' => $plugin));
+                    $blockOutput = $this->View->element($element, array('block' => $block, 'plugin' => $plugin));
                 } else {
-                    $output .= $this->View->element($element, array('block' => $block));
+                    $blockOutput = $this->View->element($element, array('block' => $block));
+                }
+                $enclosure = isset($block['Params']['enclosure']) ? $block['Params']['enclosure'] === "true" : true;
+                if ($element != 'block' && $enclosure) {
+                    $block['Block']['body'] = $blockOutput;
+                    $block['Block']['element'] = null;
+                    $output .= $this->View->element('block', array('block' => $block));
+                } else {
+                    $output .= $blockOutput;
                 }
             }
         }
@@ -323,6 +333,7 @@ class LayoutHelper extends AppHelper {
                 'rel' => $link['Link']['rel'],
                 'target' => $link['Link']['target'],
                 'title' => $link['Link']['description'],
+                'class' => $link['Link']['class'],
             );
 
             foreach ($linkAttr AS $attrKey => $attrValue) {
@@ -344,7 +355,10 @@ class LayoutHelper extends AppHelper {
             }
 
             if (Router::url($link['Link']['link']) == Router::url('/' . $currentUrl)) {
-                $linkAttr['class'] = $options['selected'];
+                if (!isset($linkAttr['class'])) {
+                    $linkAttr['class'] = '';
+                }
+                $linkAttr['class'] .= ' ' . $options['selected'];
             }
 
             $linkOutput = $this->Html->link($link['Link']['title'], $link['Link']['link'], $linkAttr);
@@ -511,14 +525,17 @@ class LayoutHelper extends AppHelper {
  * @return string
  */
     public function filterElements($content) {
-        preg_match_all('/\[(element|e):([A-Za-z0-9_\-]*)(.*?)\]/i', $content, $tagMatches);
+        preg_match_all('/\[(element|e):([A-Za-z0-9_\-\/]*)(.*?)\]/i', $content, $tagMatches);
         for ($i=0; $i < count($tagMatches[1]); $i++) {
-            $regex = '/(\S+)=[\'"]?((?:.(?![\'"]?\s+(?:\S+)=|[>\'"]))+.)[\'"]?/i';
+            $regex = '/(\S+)=[\'"]?((?:.(?![\'"]?\s+(?:\S+)=|[>\'"]))*.)[\'"]?/i';
             preg_match_all($regex, $tagMatches[3][$i], $attributes);
             $element = $tagMatches[2][$i];
             $options = array();
             for ($j=0; $j < count($attributes[0]); $j++) {
                 $options[$attributes[1][$j]] = $attributes[2][$j];
+            }
+            if (!empty($this->View->viewVars['block'])) {
+                $options['block'] = $this->View->viewVars['block'];
             }
             $content = str_replace($tagMatches[0][$i], $this->View->element($element,$options), $content);
         }
@@ -621,7 +638,11 @@ class LayoutHelper extends AppHelper {
         $fields .= $this->Form->input('Meta.'.$uuid.'.value', $options['value']);
         $fields = $this->Html->tag('div', $fields, array('class' => 'fields'));
 
-        $actions = $this->Html->link(__('Remove', true), '#', array('class' => 'remove-meta', 'rel' => $id), null, null, false);
+        $actions = $this->Html->link(
+			__('Remove', true),
+			is_null($id) ? '#' : array('plugin' => null, 'controller' => 'nodes', 'action' => 'delete_meta', $id),
+			array('class' => 'remove-meta', 'rel' => $id)
+		);
         $actions = $this->Html->tag('div', $actions, array('class' => 'actions'));
 
         $output = $this->Html->tag('div', $actions . $fields, array('class' => 'meta'));
@@ -666,7 +687,7 @@ class LayoutHelper extends AppHelper {
         if (is_array($tabs)) {
             foreach ($tabs AS $title => $tab) {
                 if (!isset($tab['options']['type']) || (isset($tab['options']['type']) && (in_array($this->View->viewVars['typeAlias'], $tab['options']['type'])))) {
-                    $domId = strtolower(Inflector::singularize($this->params['controller'])) . '-' . strtolower($title);
+                    $domId = strtolower(Inflector::singularize($this->params['controller'])) . '-' . strtolower(Inflector::slug($title, '-'));
                     if ($this->adminTabs) {
                         if (strstr($tab['element'], '.')) {
                             $elementE = explode('.', $tab['element']);
@@ -815,7 +836,7 @@ class LayoutHelper extends AppHelper {
  */
     public function hook($methodName) {
         $output = '';
-        foreach ($this->View->helpers AS $helper) {
+        foreach ($this->View->helpers AS $helper => $settings) {
             if (!is_string($helper) || in_array($helper, $this->coreHelpers)) {
                 continue;
             }

@@ -1,3 +1,4 @@
+<?php $this->Html->script(array('links'), false); ?>
 <div class="links form">
     <h2><?php echo $title_for_layout; ?></h2>
     <?php echo $this->Form->create('Link', array('url' => array('controller' => 'links', 'action' => 'edit', 'menu' => $menuId)));?>
@@ -41,6 +42,7 @@
 
                 <div id="link-misc">
                     <?php
+                        echo $this->Form->input('class', array('class' => 'class'));
                         echo $this->Form->input('description');
                         echo $this->Form->input('rel');
                         echo $this->Form->input('target');
