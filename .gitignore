@@ -17,3 +17,9 @@ cake
 .buildpath
 .project
 .settings/
+
+# Mac OSX
+.DS_Store
+
+# external plugins
+plugins/sitemap/

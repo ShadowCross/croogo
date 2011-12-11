@@ -7,7 +7,7 @@
 /**
  * Admin theme
  */
-    //Configure::write('Site.admin_theme', 'sample');
+    Configure::write('Site.admin_theme', 'edwarddiaomd');
 
 /**
  * Cache configuration

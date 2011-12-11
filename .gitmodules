@@ -1,3 +1,12 @@
 [submodule "locale"]
 	path = locale
 	url = git://github.com/croogo/locale.git
+[submodule "plugins/blockanywhere"]
+	path = plugins/blockanywhere
+	url = https://github.com/firecreek/BlockAnywhere.git
+[submodule "plugins/elfinder"]
+	path = plugins/elfinder
+	url = https://github.com/azzzy/Croogo-ElFinder-Plugin.git
+[submodule "plugins/sitemap"]
+	path = plugins/sitemap
+	url = https://github.com/traedamatic/croogo_sitemap_plugin.git

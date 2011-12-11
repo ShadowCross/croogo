@@ -1,0 +1,17 @@
+name: edwarddiaomd
+description: Edward Diao, M.D. based on the Default theme for Croogo
+screenshot: edwarddiaomd_screenshot.png
+
+author: Adriano L. de la Cruz
+authorEmail: adriano@jps.net
+authorUrl: http://
+
+menus:
+  - main
+  - footer
+
+regions:
+  - region1 (between header banner and menu)
+  - region2 (between menu and content)
+  - region3 (between content and footer)
+  - right

@@ -96,7 +96,10 @@ class TinymceHelper extends AppHelper {
     }
 
     public function getSettings($settings = array()) {
-        $_settings = Set::merge($this->settings, array('content_css' => $this->Html->css('content.css')));
+        $_settings = Set::merge($this->settings, array(
+        	'content_css' => $this->Html->css('content.css'),
+        	'extended_valid_elements' => 'form[accept|accept-charset|action|class|dir<ltr?rtl|enctype|id|lang|method<get?post|name|onclick|ondblclick|onkeydown|onkeypress|onkeyup|onmousedown|onmousemove|onmouseout|onmouseover|onmouseup|onreset|onsubmit|style|title|target]'
+        ));
         $action = Inflector::camelize($this->params['controller']).'/'.$this->params['action'];
         if (isset($this->actions[$action])) {
             $settings = array();

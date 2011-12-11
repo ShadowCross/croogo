@@ -1,0 +1,28 @@
+TODO:
+  
+- Upload the following external files using Admin > Media > Attachments, and adjust the associated pages  
+  - diao-cv.pdf
+    - /page/curriculum-vitae
+  - new-patient-sheet.pdf
+    - /page/consultation
+  - Diao Legal Contract and Fee Schedule.pdf
+    - /page/patient-forms
+  - Savery_Betsy.pdf
+    - /page/aaos-research-capital-hill-days
+  - Smith_Karen Gundry.pdf
+    - /page/aaos-research-capital-hill-days
+  - Baggett_Keith.pdf
+    -/page/aaos-research-capital-hill-days
+  - Howley_Joan.pdf
+    - /page/aaos-research-capital-hill-days
+  - Baggett_Judy.pdf
+    - /page/aaos-research-capital-hill-days
+  - Baggett_Max.pdf
+    - /page/aaos-research-capital-hill-days
+  
+- Upload the following Flash videos and adjust the corresponding blocks using Admin > Blocks  
+  - /flash/scroller,swf (home page image rotation)
+    - "Home Page Slideshow (home)
+  - /flash/inner_side.swf (side panel image rotation)
+    - mini-slide-show
+   
