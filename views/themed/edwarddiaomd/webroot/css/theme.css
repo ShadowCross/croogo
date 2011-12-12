@@ -308,6 +308,13 @@ img.picRight {
 	text-align: center;
 }
 
+#recaptcha_area {
+	margin: 0 auto;
+}
+
+.error-message {
+	color: red;
+}
 pre.cake-debug {
 	display:none;
 }
